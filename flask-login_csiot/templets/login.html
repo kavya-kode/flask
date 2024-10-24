@@ -1,1 +1,24 @@
-''
+<html lang="en">
+<head>
+     <title>send email</title>
+    <link rel="stylesheet" type="text/css"
+    href="{{url_for('static',filename='style.css')}}">
+</head>   
+<body>
+    <div class = "container">
+        <h1>Email Sender</h1>
+        <a href="{{url_for('send_email')}}" class="btn">
+            Send Test Email
+        </a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert{{category}}">{{message}}</div>
+                            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+     
+     </div>
+</body>
