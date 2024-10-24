@@ -1,10 +1,33 @@
-from flask import Flask, render_template, redirect, url_for, request, flash 
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_usser,current_user
+from flask import Flask, render_template,flash,url_for
+from flask_mail import Mail,Message
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secrete_key'   #Replace with your secrete key
 
-# Initialise Flask-Login
-Login_Manager = LoginManager()
-Login_Manager.init_app(app)
-Login_Manager.login_view = 'login'   #Redirects unauthorized users to the login page
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'jaideepreddych@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Shreeram007'
+app.config['MAIL_DEFAULT_SENDER'] = 'jaideepreddych.gmail.com'
+mail = Mail(app)
+@app.route('/')
+def index():
+     return render_template('index.html')
+@app.route('/send_email')
+def send_email():
+    try:
+        msg = Message("Test Email", recipients=["jaideeproll7@gmail.com"])
+        msg.body ="this is the body of the email"
+        msg.html ="<b>this is the body of the email in html format"
+        mail.send(msg)
+
+        flash('email sent successfully!','success')
+    except Exception as e:
+
+        flash(f"an error occured:{e}",'danger')
+    return redirect(url_for('index'))
+
+
+if __name__=='__main__':
+    app.secret_key = 'your_secret_key'
+    app.run(debug=True)
